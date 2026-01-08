@@ -1,5 +1,4 @@
 import './App.css'
-import { PreviewFrame } from './components/PreviewFrame'
 import { IDEpage } from './pages/IDEpage'
 
 function App() {

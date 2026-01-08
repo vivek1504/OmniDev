@@ -73,21 +73,6 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(
             <TerminalIcon className="w-3.5 h-3.5 text-primary" />
             <span className="text-xs font-medium">Terminal</span>
           </div>
-          <div className="flex items-center gap-1">
-            <button
-              onClick={() => setIsExpanded(!isExpanded)}
-              className="p-1 rounded text-muted-foreground hover:text-foreground"
-            >
-              {isExpanded ? (
-                <Minimize2 className="w-3.5 h-3.5" />
-              ) : (
-                <Maximize2 className="w-3.5 h-3.5" />
-              )}
-            </button>
-            <button className="p-1 rounded text-muted-foreground hover:text-destructive">
-              <X className="w-3.5 h-3.5" />
-            </button>
-          </div>
         </div>
 
         {/* Terminal body */}

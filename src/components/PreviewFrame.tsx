@@ -7,7 +7,7 @@ export const PreviewFrame = forwardRef<HTMLIFrameElement>(
                 ref={ref}
                 style={{
                     width: "100%",
-                    height: "80vh",
+                    height: "100vh",
                     border: "1px solid #ddd",
              }}
         />
