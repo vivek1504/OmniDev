@@ -20,12 +20,16 @@ export const IDEpage = () => {
   }, [terminalReady]);
 
   return (
-    <div className="grid grid-cols-5 h-screen">
-      {/* LEFT SIDE */}
-      <div className="col-span-3 flex flex-col">
-        <CodeEditor />
+    <div className="grid grid-cols-5 h-screen overflow-hidden">
+      {/* LEFT PANEL */}
+      <div className="col-span-3 flex flex-col h-full overflow-hidden">
+        {/* EDITOR */}
+        <div className="flex-1 overflow-hidden">
+          <CodeEditor />
+        </div>
 
-        <div className="flex-1">
+        {/* TERMINAL (STICKY BOTTOM) */}
+        <div className="h-64 shrink-0">
           <Terminal
             ref={terminalRef}
             onReady={() => setTerminalReady(true)}
@@ -33,10 +37,11 @@ export const IDEpage = () => {
         </div>
       </div>
 
-      {/* RIGHT SIDE */}
-      <div className="col-span-2 border-blue-200 h-screen">
+      {/* RIGHT PANEL */}
+      <div className="col-span-2 h-full border-l border-border overflow-hidden">
         <PreviewFrame ref={iframeRef} />
       </div>
     </div>
   );
 };
+

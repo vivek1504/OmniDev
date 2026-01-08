@@ -41,8 +41,7 @@ export const CodeEditor = () => {
   }, [fileContent, selectedFile])
 
   return (
-    <div className=" flex flex-col bg-code">
-      <div className="flex h-full">
+    <div className="flex h-full bg-code overflow-hidden">
       <div className="w-64 border-r border-border overflow-auto">
         <FileTree
           data={treeData}
@@ -51,7 +50,7 @@ export const CodeEditor = () => {
         />
       </div>
 
-      <div className="flex-1">
+      <div className="flex-1 overflow-hidden">
         <Editor
           height="100%"
           path={selectedFile ?? undefined}
@@ -75,7 +74,6 @@ export const CodeEditor = () => {
           }}
         />
       </div>
-    </div>
     </div>
   );
 };
