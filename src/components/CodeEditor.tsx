@@ -42,7 +42,7 @@ export const CodeEditor = () => {
 
   return (
     <div className="flex h-full bg-code overflow-hidden">
-      <div className="w-64 border-r border-border overflow-auto">
+      <div className="w-50 border-r border-border overflow-hidden p-4">
         <FileTree
           data={treeData}
           selectedFile={selectedFile}
@@ -50,7 +50,7 @@ export const CodeEditor = () => {
         />
       </div>
 
-      <div className="flex-1 overflow-hidden">
+      <div className="flex-1 overflow-hidden p-2 m-2">
         <Editor
           height="100%"
           path={selectedFile ?? undefined}
@@ -60,7 +60,7 @@ export const CodeEditor = () => {
           beforeMount={defineTheme}
           onChange={(value) => setFileContent(value ?? "")}
           options={{
-            fontSize: 13,
+            fontSize: 15,
               fontFamily: "JetBrains Mono, Fira Code, monospace",
               minimap: { enabled: false },
               scrollBeyondLastLine: false,

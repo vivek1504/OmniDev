@@ -57,15 +57,6 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(
       <div
         className={`flex flex-col bg-terminal border-t border-border transition-all duration-300`}
       >
-        {/* Header */}
-        {/* <div className="h-8 flex items-center justify-between px-3 bg-secondary/20 border-b border-border">
-          <div className="flex items-center gap-2">
-            <TerminalIcon className="w-3.5 h-3.5 text-primary" />
-            <span className="text-xs font-medium">Terminal</span>
-          </div>
-        </div> */}
-
-        {/* Terminal body */}
         <div className="flex-1 overflow-hidden">
           <div ref={containerRef} className="h-full w-full" />
         </div>
