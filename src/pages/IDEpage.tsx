@@ -4,6 +4,8 @@ import { PreviewFrame } from "../components/PreviewFrame";
 import { Terminal } from "../components/Terminal";
 import type { TerminalHandle } from "../components/Terminal";
 import { CodeEditor } from "../components/CodeEditor";
+import { IdeHeader } from "../components/IdeHeader";
+import { IdeFooter } from "../components/IdeFooter";
 
 
 export const IDEpage = () => {
