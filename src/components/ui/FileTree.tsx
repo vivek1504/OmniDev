@@ -12,8 +12,8 @@ import {
 
 type Props = {
   data: FileNode[]
-  onFileSelect: (path: string) => void
-  selectedFile: any
+  onNodeSelect:(node: FileNode)=> void
+  selectedPath: string | null
 }
 
 export async function buildTree(fs: FileSystemAPI, dir: string = "/"): Promise<FileNode[]> {
@@ -45,7 +45,7 @@ export async function buildTree(fs: FileSystemAPI, dir: string = "/"): Promise<F
 }
 
 
-export function FileTree({ data, onFileSelect, selectedFile }: Props) {
+export function FileTree({ data, onNodeSelect, selectedPath }: Props) {
   return (
     <Tree
       data={data}
@@ -56,8 +56,8 @@ export function FileTree({ data, onFileSelect, selectedFile }: Props) {
       rowHeight={28}
       onSelect={(nodes) => {
         const node = nodes[0];
-        if (node?.data.type === "file") {
-          onFileSelect(node.data.path)
+        if (node) {
+          onNodeSelect(node.data)
         }
       }}>
       {Node}
@@ -67,8 +67,8 @@ export function FileTree({ data, onFileSelect, selectedFile }: Props) {
 }
 
 function Node({ node, style }: NodeRendererProps<FileNode>) {
-  //@ts-ignore
-  const isSelected = node.data.path === node.tree.props.selectedFile;
+    //@ts-ignore
+  const isSelected = node.data.path === node.tree.props.selectedPath;
   const Icon = getIcon(node.data, node.isOpen)
   return (
     <div

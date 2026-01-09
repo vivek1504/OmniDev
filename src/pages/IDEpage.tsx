@@ -4,6 +4,7 @@ import { PreviewFrame } from "../components/PreviewFrame";
 import { Terminal } from "../components/Terminal";
 import type { TerminalHandle } from "../components/Terminal";
 import { CodeEditor } from "../components/CodeEditor";
+import { Sidebar } from "../components/Sidebar";
 import { IdeHeader } from "../components/IdeHeader";
 import { IdeFooter } from "../components/IdeFooter";
 
@@ -28,18 +29,22 @@ export const IDEpage = () => {
       <div className="flex-1 overflow-hidden relative">
         <div className="grid grid-cols-5 h-full">
           {/* LEFT PANEL */}
-          <div className="col-span-3 flex flex-col h-full overflow-hidden border-r border-border">
-            {/* EDITOR */}
-            <div className="flex-1 overflow-hidden p-1">
-              <CodeEditor />
-            </div>
+          <div className="col-span-3 flex h-full overflow-hidden border-r border-border">
+            <Sidebar />
 
-            {/* TERMINAL (STICKY BOTTOM) */}
-            <div className="h-64 shrink-0">
-              <Terminal
-                ref={terminalRef}
-                onReady={() => setTerminalReady(true)}
-              />
+            <div className="flex-1 flex flex-col h-full overflow-hidden">
+              {/* EDITOR */}
+              <div className="flex-1 overflow-hidden p-1">
+                <CodeEditor />
+              </div>
+
+              {/* TERMINAL (STICKY BOTTOM) */}
+              <div className="h-50 shrink-0">
+                <Terminal
+                  ref={terminalRef}
+                  onReady={() => setTerminalReady(true)}
+                />
+              </div>
             </div>
           </div>
 
