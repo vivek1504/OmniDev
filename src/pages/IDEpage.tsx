@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react";
 import { startWorkspace } from "../libs/webContainerRuntime";
 import { PreviewFrame } from "../components/PreviewFrame";
 import { Terminal } from "../components/Terminal";
@@ -7,7 +7,6 @@ import { CodeEditor } from "../components/CodeEditor";
 import { Sidebar } from "../components/Sidebar";
 import { IdeHeader } from "../components/IdeHeader";
 import { IdeFooter } from "../components/IdeFooter";
-
 
 export const IDEpage = () => {
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
@@ -19,7 +18,9 @@ export const IDEpage = () => {
     if (!terminalRef.current?.term) return;
     if (!iframeRef.current) return;
 
-    startWorkspace(iframeRef.current, terminalRef.current.term).catch(console.error);
+    startWorkspace(iframeRef.current, terminalRef.current.term).catch(
+      console.error
+    );
   }, [terminalReady]);
 
   return (
@@ -39,17 +40,19 @@ export const IDEpage = () => {
               </div>
 
               {/* TERMINAL (STICKY BOTTOM) */}
-              <div className="h-50 shrink-0">
+              <div className="h-50 shrink-0 mb-2">
                 <Terminal
                   ref={terminalRef}
-                  onReady={() => setTerminalReady(true)}
+                  onReady={() => {
+                    setTerminalReady(true);
+                  }}
                 />
               </div>
             </div>
           </div>
 
           {/* RIGHT PANEL */}
-          <div className="col-span-2 h-full overflow-hidden bg-background border-l border-neutral-100">
+          <div className="col-span-2 h-full overflow-hidden bg-background border-l border-zinc-900">
             <PreviewFrame ref={iframeRef} />
           </div>
         </div>
@@ -59,4 +62,3 @@ export const IDEpage = () => {
     </div>
   );
 };
-

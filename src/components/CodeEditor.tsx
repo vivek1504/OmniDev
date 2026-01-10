@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FileJson, FileCode, FileText } from "lucide-react";
+import { FileJson, FileCode, FileText, AlertTriangle } from "lucide-react";
 import { getWebContainer } from "../libs/webContainerManager";
 import {  FileTree } from "./ui/FileTree";
 import Editor from "@monaco-editor/react"
@@ -14,6 +14,7 @@ export const CodeEditor = () => {
   const [selectedFile, setSelectedFile] = useState<string | null>(null)
   const [fileContent, setFileContent] = useState("")
   const [selectedNode, setSelectedNode] = useAtom<FileNode |null>(selectedNodeAtom)
+  const [showDeleteModal, setshowDeleteModal] = useState(false)
   const [, deleteNode] = useAtom(deleteNodeAtom)
 
   useEffect(() => {
@@ -23,7 +24,7 @@ export const CodeEditor = () => {
   useEffect(()=>{
     const onKey = (e: KeyboardEvent)=>{
         if(e.key === "Delete"){
-            deleteNode()
+            setshowDeleteModal(true)
         }
     }
 
@@ -109,6 +110,50 @@ export const CodeEditor = () => {
           />
         </div>
       </div>
+
+      {showDeleteModal && selectedNode && (
+                <div
+                    className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 animate-in fade-in duration-150"
+                    onClick={() => setshowDeleteModal(false)}
+                >
+                    <div
+                        className="bg-card border border-border rounded-lg shadow-2xl w-80 p-5 flex flex-col gap-4 animate-in zoom-in-95 duration-200"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="flex items-center gap-3">
+                            <div className="p-2 bg-destructive/20 rounded-full">
+                                <AlertTriangle className="w-5 h-5 text-destructive" />
+                            </div>
+                            <div>
+                                <div className="text-sm font-semibold text-foreground">Delete {selectedNode.type === "file" ? "File" : "Folder"}</div>
+                                <div className="text-xs text-muted-foreground">This action cannot be undone</div>
+                            </div>
+                        </div>
+
+                        <div className="bg-secondary/50 border border-border rounded-md px-3 py-2 text-sm text-foreground truncate">
+                            {selectedNode.name}
+                        </div>
+
+                        <div className="flex gap-2 justify-end">
+                            <button
+                                onClick={() => setshowDeleteModal(false)}
+                                className="px-4 py-2 text-xs font-medium text-muted-foreground hover:text-foreground rounded-md hover:bg-accent transition-colors"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                className="px-4 py-2 text-xs font-medium bg-destructive text-destructive-foreground rounded-md hover:bg-destructive/90 transition-colors"
+                                onClick={() => {
+                                    deleteNode()
+                                    setshowDeleteModal(false)
+                                }}
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
     </div>
   );
 };
