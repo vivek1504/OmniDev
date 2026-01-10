@@ -33,8 +33,6 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(
         terminal.open(containerRef.current);
         fitAddon.fit();
 
-        terminal.writeln("$ WebContainer Terminal Ready");
-
         fitAddonRef.current = fitAddon;
         markOpened();
         onReady?.();
@@ -62,4 +60,4 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(
       </div>
     );
   }
-);  
+);
