@@ -1,10 +1,17 @@
-import './App.css'
-import { IDEpage } from './pages/IDEpage'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "./App.css";
+import { LandingPage } from "./pages/LandingPage";
+import { IDEpage } from "./pages/IDEpage";
 
 function App() {
-  return <div>
-    <IDEpage></IDEpage>
-  </div>
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LandingPage></LandingPage>}></Route>
+        <Route path="/ide" element={<IDEpage></IDEpage>}></Route>
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;

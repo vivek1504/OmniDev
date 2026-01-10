@@ -9,7 +9,7 @@ export function getTerminal() {
       fontSize: 14,
       cursorBlink: true,
       convertEol: true,
-      scrollback: 2000,
+      scrollback: 5000,
       theme: { background: "#0e0e0e" },
     });
   }

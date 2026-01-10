@@ -1,22 +1,42 @@
 import type { Terminal } from "xterm";
-import { projectFiles } from "./projectFiles";
+import {
+  reactProjectFiles,
+  nodeProjectFiles,
+  svelteProjectFiles,
+  vueProjectFiles,
+} from "./projectFiles";
 import { getWebContainer } from "./webContainerManager";
-import chalk from "chalk";
 
 let workspaceStarting = false;
 let shellProcess: any = null;
 export async function startWorkspace(
   iframe: HTMLIFrameElement,
-  terminal: Terminal
+  terminal: Terminal,
+  framework: string
 ) {
   if (workspaceStarting) return;
   workspaceStarting = true;
 
   try {
+    if (!framework) return;
+
     const webcontainer = await getWebContainer();
 
+    shellProcess?.kill();
+    shellProcess = null;
+
+    terminal.clear();
+
+    let projectFiles = null;
+    if (framework === "React") projectFiles = reactProjectFiles;
+    if (framework === "Node.js") projectFiles = nodeProjectFiles;
+    if (framework === "Vue") projectFiles = vueProjectFiles;
+    if (framework === "Svelte") projectFiles = svelteProjectFiles;
+
+    if (!projectFiles) return;
+
     await webcontainer.mount(projectFiles);
-    terminal.writeln(chalk.blue("~/my-project > ") + "npm run dev");
+    terminal.writeln("\x1b[34m~/my-project >\x1b[0m npm install");
 
     const installProcess = await webcontainer.spawn("npm", ["install"]);
     installProcess.output.pipeTo(
@@ -32,8 +52,6 @@ export async function startWorkspace(
     if (exitCode !== 0) {
       throw new Error("npm install failed");
     }
-
-    terminal.write("\r\n Dependencies installed\r\n");
 
     webcontainer.on("server-ready", (_, url) => {
       iframe.src = url;
@@ -74,5 +92,7 @@ export async function startWorkspace(
   } catch (e) {
     terminal.writeln("\r\n❌ Error starting workspace\r\n");
     console.error("error starting workspace", e);
+  } finally {
+    workspaceStarting = false;
   }
 }

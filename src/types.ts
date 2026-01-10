@@ -5,9 +5,9 @@ export interface TerminalHandle {
 }
 
 export type FileNode = {
-    id: string
-    name: string
-    type: "file" | "directory"
-    children? : FileNode[]
-    path:string,
-}
+  id: string;
+  name: string;
+  type: "file" | "directory";
+  children?: FileNode[];
+  path: string;
+};

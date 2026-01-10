@@ -52,9 +52,9 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(
 
     return (
       <div
-        className={`flex flex-col bg-terminal border-t border-border transition-all duration-300`}
+        className={`h-full flex flex-col bg-terminal border-t border-border transition-all duration-300`}
       >
-        <div className="flex-1 overflow-hidden">
+        <div className="flex-1 min-h-0 overflow-hidden">
           <div ref={containerRef} className="h-full w-full" />
         </div>
       </div>

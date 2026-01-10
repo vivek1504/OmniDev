@@ -7,20 +7,26 @@ import { CodeEditor } from "../components/CodeEditor";
 import { Sidebar } from "../components/Sidebar";
 import { IdeHeader } from "../components/IdeHeader";
 import { IdeFooter } from "../components/IdeFooter";
+import { useSearchParams } from "react-router-dom";
 
 export const IDEpage = () => {
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const terminalRef = useRef<TerminalHandle | null>(null);
   const [terminalReady, setTerminalReady] = useState(false);
+  const [searchParams] = useSearchParams();
+  const framework = searchParams.get("framework") || "React";
 
   useEffect(() => {
     if (!terminalReady) return;
     if (!terminalRef.current?.term) return;
     if (!iframeRef.current) return;
+    if (!framework) return;
 
-    startWorkspace(iframeRef.current, terminalRef.current.term).catch(
-      console.error
-    );
+    startWorkspace(
+      iframeRef.current,
+      terminalRef.current.term,
+      framework
+    ).catch(console.error);
   }, [terminalReady]);
 
   return (
@@ -40,7 +46,7 @@ export const IDEpage = () => {
               </div>
 
               {/* TERMINAL (STICKY BOTTOM) */}
-              <div className="h-50 shrink-0 mb-2">
+              <div className="h-50 shrink-0">
                 <Terminal
                   ref={terminalRef}
                   onReady={() => {

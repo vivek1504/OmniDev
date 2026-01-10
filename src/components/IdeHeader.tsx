@@ -1,24 +1,28 @@
-import { Code2, Play, Share2 } from "lucide-react";
+import { Code2, Play, Share2, Download, Upload } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export const IdeHeader = () => {
+  const navigate = useNavigate()
   return (
     <div className="h-12 border-b border-border bg-sidebar flex items-center justify-between px-4 shrink-0">
-      <div className="flex items-center gap-2">
+      <button onClick={() => navigate("/")} className="flex items-center gap-2 cursor-pointer">
         <div className="bg-primary/10 p-1 rounded-md">
           <Code2 className="w-5 h-5 text-primary" />
         </div>
         <span className="font-semibold text-sm tracking-tight text-foreground">
           OmniIDE
         </span>
-      </div>
+      </button>
 
-      <div className="flex bg-secondary/50 rounded-lg p-1 border border-border/50">
-        <div className="px-3 py-1 text-xs font-medium text-foreground bg-background rounded-md shadow-sm">
-          Code
-        </div>
-        <div className="px-3 py-1 text-xs font-medium text-muted-foreground hover:text-foreground cursor-pointer transition-colors">
-          Design
-        </div>
+      <div className="flex items-center gap-2">
+        <button className="flex items-center font-normal gap-1.5 px-3 py-1.5 hover:bg-blue-500/10 hover:text-blue-400 text-blue-500 text-xs rounded-md transition-colors border border-blue-500/20 cursor-pointer">
+          <Download className="w-3.5 h-3.5" />
+          <span>Download</span>
+        </button>
+        <button className="flex items-center font-medium gap-1.5 px-3 py-1.5 hover:bg-violet-500/10 hover:text-violet-400 text-violet-500 text-xs rounded-md transition-colors border border-violet-500/20 cursor-pointer">
+          <Upload className="w-3.5 h-3.5" />
+          <span>Publish</span>
+        </button>
       </div>
 
       <div className="flex items-center gap-3">
