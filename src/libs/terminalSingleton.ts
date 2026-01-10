@@ -6,7 +6,7 @@ let isOpened = false;
 export function getTerminal() {
   if (!terminal) {
     terminal = new XTerm({
-      fontSize: 12,
+      fontSize: 14,
       cursorBlink: true,
       convertEol: true,
       scrollback: 2000,

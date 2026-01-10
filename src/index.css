@@ -105,3 +105,14 @@
         @apply bg-background text-foreground antialiased;
     }
 }
+
+.xterm .xterm-viewport {
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+.xterm .xterm-viewport::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+    /* Chrome/Safari */
+}

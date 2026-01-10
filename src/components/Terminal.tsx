@@ -2,7 +2,6 @@ import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import { Terminal as Xterm } from "xterm";
 import { FitAddon } from "xterm-addon-fit";
 import { getTerminal } from "../libs/terminalSingleton";
-import {Terminal as TerminalIcon,} from "lucide-react";
 import "xterm/css/xterm.css";
 export interface TerminalHandle {
   term: Xterm | null;
@@ -25,7 +24,7 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(
     useEffect(() => {
       if (!containerRef.current) return;
 
-      const {terminal, isOpened, markOpened}  = getTerminal();
+      const { terminal, isOpened, markOpened } = getTerminal();
 
       if (!isOpened) {
         const fitAddon = new FitAddon();
