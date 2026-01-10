@@ -1,6 +1,7 @@
 import type { Terminal } from "xterm";
 import { projectFiles } from "./projectFiles";
 import { getWebContainer } from "./webContainerManager";
+import chalk from "chalk";
 
 let workspaceStarting = false;
 let shellProcess: any = null;
@@ -15,8 +16,7 @@ export async function startWorkspace(
     const webcontainer = await getWebContainer();
 
     await webcontainer.mount(projectFiles);
-
-    terminal.writeln("\r\nInstalling dependencies...\r\n");
+    terminal.writeln(chalk.blue("~/my-project > ") + "npm run dev");
 
     const installProcess = await webcontainer.spawn("npm", ["install"]);
     installProcess.output.pipeTo(
