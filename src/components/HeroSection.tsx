@@ -104,7 +104,7 @@ export function HeroSection() {
             Launch IDE
           </button>
           <a
-            href="https://github.com/vivek1504/omnidev"
+            href="https://github.com/vivek1504/forge"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 px-8 py-4 bg-zinc-800/80 text-zinc-300 font-medium rounded-lg border border-zinc-700 hover:bg-zinc-700/80 hover:text-white transition-all duration-200"

@@ -1,49 +1,43 @@
-import type { FileNode } from "../../types";
-import { type FileSystemAPI } from "@webcontainer/api"
-import { Tree, type NodeRendererProps } from "react-arborist"
-import {
-  Folder,
-  FolderOpen,
-  FileCode,
-  FileJson,
-  FileText
-} from "lucide-react";
-
+import type { FileNode } from "../../lib/types";
+import { type FileSystemAPI } from "@webcontainer/api";
+import { Tree, type NodeRendererProps } from "react-arborist";
+import { Folder, FolderOpen, FileCode, FileJson, FileText } from "lucide-react";
 
 type Props = {
-  data: FileNode[]
-  onNodeSelect:(node: FileNode)=> void
-  selectedPath: string | null
-}
+  data: FileNode[];
+  onNodeSelect: (node: FileNode) => void;
+  selectedPath: string | null;
+};
 
-export async function buildTree(fs: FileSystemAPI, dir: string = "/"): Promise<FileNode[]> {
-  const entries = await fs.readdir(dir, { withFileTypes: true })
+export async function buildTree(
+  fs: FileSystemAPI,
+  dir: string = "/"
+): Promise<FileNode[]> {
+  const entries = await fs.readdir(dir, { withFileTypes: true });
 
-  const nodes: FileNode[] = []
+  const nodes: FileNode[] = [];
 
   for (const entry of entries) {
-    const fullPath = dir === "/" ? `/${entry.name}` : `${dir}/${entry.name}`
+    const fullPath = dir === "/" ? `/${entry.name}` : `${dir}/${entry.name}`;
     if (entry.isDirectory()) {
       nodes.push({
         id: fullPath,
         name: entry.name,
         type: "directory",
         path: fullPath,
-        children: await buildTree(fs, fullPath)
-      })
-    }
-    else {
+        children: await buildTree(fs, fullPath),
+      });
+    } else {
       nodes.push({
         id: fullPath,
         name: entry.name,
         type: "file",
-        path: fullPath
-      })
+        path: fullPath,
+      });
     }
   }
-  return nodes
+  return nodes;
 }
-
 
 export function FileTree({ data, onNodeSelect, selectedPath }: Props) {
   return (
@@ -57,25 +51,29 @@ export function FileTree({ data, onNodeSelect, selectedPath }: Props) {
       onSelect={(nodes) => {
         const node = nodes[0];
         if (node) {
-          onNodeSelect(node.data)
+          onNodeSelect(node.data);
         }
-      }}>
+      }}
+    >
       {Node}
     </Tree>
-
-  )
+  );
 }
 
 function Node({ node, style }: NodeRendererProps<FileNode>) {
-    //@ts-ignore
+  //@ts-ignore
   const isSelected = node.data.path === node.tree.props.selectedPath;
-  const Icon = getIcon(node.data, node.isOpen)
+  const Icon = getIcon(node.data, node.isOpen);
   return (
     <div
       style={style}
       className={`
         flex items-center gap-2 px-2 cursor-pointer
-        ${isSelected ? "bg-accent text-accent-foreground" : "hover:bg-accent hover:text-accent-foreground"}
+        ${
+          isSelected
+            ? "bg-accent text-accent-foreground"
+            : "hover:bg-accent hover:text-accent-foreground"
+        }
       `}
       onClick={() => {
         if (node.data.type === "directory") {

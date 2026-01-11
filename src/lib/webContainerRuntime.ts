@@ -6,9 +6,13 @@ import {
   vueProjectFiles,
 } from "./projectFiles";
 import { getWebContainer } from "./webContainerManager";
+import { isRunningAtom } from "./atoms";
+import { store } from "./store";
 
 let workspaceStarting = false;
 let shellProcess: any = null;
+let shellWriter: WritableStreamDefaultWriter | null = null;
+
 export async function startWorkspace(
   iframe: HTMLIFrameElement,
   terminal: Terminal,
@@ -24,6 +28,11 @@ export async function startWorkspace(
 
     shellProcess?.kill();
     shellProcess = null;
+
+    if (shellWriter) {
+      await shellWriter.close();
+      shellWriter = null;
+    }
 
     terminal.clear();
 
@@ -64,7 +73,7 @@ export async function startWorkspace(
       },
     });
 
-    const writer = shellProcess.input.getWriter();
+    shellWriter = shellProcess.input.getWriter();
 
     shellProcess.output.pipeTo(
       new WritableStream({
@@ -75,10 +84,11 @@ export async function startWorkspace(
     );
 
     terminal.onData((data) => {
-      writer.write(data);
+      shellWriter?.write(data);
 
       if (data === "\u0003") {
         iframe.src = "about:blank";
+        store.set(isRunningAtom, false);
       }
     });
 
@@ -88,11 +98,25 @@ export async function startWorkspace(
 
     workspaceStarting = false;
 
-    writer.write("npm run dev\r");
+    await runDevServer();
   } catch (e) {
     terminal.writeln("\r\n❌ Error starting workspace\r\n");
     console.error("error starting workspace", e);
+    store.set(isRunningAtom, false);
   } finally {
     workspaceStarting = false;
   }
+}
+
+export async function runDevServer() {
+  if (!shellProcess || !shellWriter) {
+    throw new Error("shell not intialized");
+  }
+
+  if (store.get(isRunningAtom)) return;
+
+  shellWriter.write("npm run dev\r");
+
+  store.set(isRunningAtom, true);
+  console.log("runtime:", store.get(isRunningAtom));
 }

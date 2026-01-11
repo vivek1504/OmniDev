@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { startWorkspace } from "../libs/webContainerRuntime";
+import { startWorkspace } from "../lib/webContainerRuntime";
 import { PreviewFrame } from "../components/PreviewFrame";
 import { Terminal } from "../components/Terminal";
 import type { TerminalHandle } from "../components/Terminal";

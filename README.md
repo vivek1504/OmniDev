@@ -1,8 +1,8 @@
-# OmniIDE
+# Forge
 
 A real in-browser IDE powered by WebContainers. Code, build, and run projects directly in your browser with zero setup.
 
-![OmniIDE](https://img.shields.io/badge/OmniIDE-v1.2.0-blue)
+![Forge](https://img.shields.io/badge/Forge-v1.2.0-blue)
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript)
 ![Vite](https://img.shields.io/badge/Vite-7-646CFF?logo=vite)
@@ -40,8 +40,8 @@ A real in-browser IDE powered by WebContainers. Code, build, and run projects di
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/omni-ide.git
-cd omni-ide
+git clone https://github.com/yourusername/forge.git
+cd forge
 
 # Install dependencies
 npm install

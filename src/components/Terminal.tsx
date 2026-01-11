@@ -1,7 +1,7 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import { Terminal as Xterm } from "xterm";
 import { FitAddon } from "xterm-addon-fit";
-import { getTerminal } from "../libs/terminalSingleton";
+import { getTerminal } from "../lib/terminalSingleton";
 import "xterm/css/xterm.css";
 export interface TerminalHandle {
   term: Xterm | null;

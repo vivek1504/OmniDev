@@ -6,7 +6,7 @@ import {
   SvelteLogo,
   VueLogo,
   RemixLogo,
-} from "./FrameworkLogos";
+} from "../components/ui/FrameworkLogos";
 import { useNavigate } from "react-router-dom";
 
 const frameworks = [

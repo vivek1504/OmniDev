@@ -1,14 +1,16 @@
-import { getWebContainer } from "@/libs/webContainerManager";
-import { Code2, Play, Share2, Download, Upload, Loader2 } from "lucide-react";
+import { getWebContainer } from "@/lib/webContainerManager";
+import { Play, Share2, Download, Upload, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
+import { useAtom } from "jotai";
+import { isRunningAtom } from "@/lib/atoms";
+import { runDevServer } from "@/lib/webContainerRuntime";
 
 export const IdeHeader = () => {
-  const navigate = useNavigate()
   const [webContainer, setWebContainer] = useState<any>(null);
   const [isDownloading, setIsDownloading] = useState(false);
+  const [isRunning, setIsRunning] = useAtom(isRunningAtom);
 
   useEffect(() => {
     getWebContainer().then(setWebContainer);
@@ -24,25 +26,33 @@ export const IdeHeader = () => {
     }
   };
 
+  const handleRun = async () => {
+    if (!webContainer || isRunning) return;
+    try {
+      await runDevServer();
+    } catch (e) {
+      console.log(e);
+      setIsRunning(false);
+    }
+  };
+
   return (
     <div className="h-12 border-b border-border bg-sidebar flex items-center justify-between px-4 shrink-0">
-      <button onClick={() => navigate("/")} className="flex items-center gap-2 cursor-pointer">
-        <div className="bg-primary/10 p-1 rounded-md">
-          <Code2 className="w-5 h-5 text-primary" />
-        </div>
-        <span className="font-semibold text-sm tracking-tight text-foreground">
-          OmniIDE
-        </span>
+      <button
+        onClick={() => (window.location.href = "/")}
+        className="flex items-center gap-2 cursor-pointer"
+      >
+        <img src="/logo.png" alt="Forge" className="h-6 rounded-md" />
       </button>
-
       <div className="flex items-center gap-2">
         <button
           onClick={handleDownload}
           disabled={isDownloading}
-          className={`flex items-center font-normal gap-1.5 px-3 py-1.5 text-xs rounded-md transition-all border cursor-pointer ${isDownloading
+          className={`flex items-center font-normal gap-1.5 px-3 py-1.5 text-xs rounded-md transition-all border cursor-pointer ${
+            isDownloading
               ? "bg-blue-500/10 text-blue-400 border-blue-500/30"
               : "hover:bg-blue-500/10 hover:text-blue-400 text-blue-500 border-blue-500/20"
-            }`}
+          }`}
         >
           {isDownloading ? (
             <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -51,6 +61,7 @@ export const IdeHeader = () => {
           )}
           <span>{isDownloading ? "Downloading..." : "Download"}</span>
         </button>
+
         <button className="flex items-center font-medium gap-1.5 px-3 py-1.5 hover:bg-violet-500/10 hover:text-violet-400 text-violet-500 text-xs rounded-md transition-colors border border-violet-500/20 cursor-pointer">
           <Upload className="w-3.5 h-3.5" />
           <span>Publish</span>
@@ -58,9 +69,21 @@ export const IdeHeader = () => {
       </div>
 
       <div className="flex items-center gap-3">
-        <button className="flex items-center gap-1.5 px-3 py-1.5 hover:bg-green-500/10 hover:text-green-400 text-green-500 text-xs font-medium rounded-md transition-colors border border-green-500/20">
-          <Play className="w-3.5 h-3.5 fill-current" />
-          <span>Run</span>
+        <button
+          onClick={handleRun}
+          disabled={isRunning}
+          className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md transition-all border cursor-pointer ${
+            isRunning
+              ? "bg-green-500/10 text-green-400 border-green-500/30"
+              : "hover:bg-green-500/10 hover:text-green-400 text-green-500 border-green-500/20"
+          }`}
+        >
+          {isRunning ? (
+            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+          ) : (
+            <Play className="w-3.5 h-3.5 fill-current" />
+          )}
+          <span>{isRunning ? "Running..." : "Run"}</span>
         </button>
         <button className="p-2 hover:bg-secondary rounded-md transition-colors text-muted-foreground hover:text-foreground">
           <Share2 className="w-4 h-4" />
