@@ -63,20 +63,30 @@ npm run preview
 
 ```
 src/
-├── components/          # React components
-│   ├── landing/         # Landing page components
-│   ├── CodeEditor.tsx   # Monaco editor wrapper
-│   ├── Terminal.tsx     # xterm.js terminal
-│   ├── Sidebar.tsx      # File explorer sidebar
-│   └── ...
-├── libs/                # Core libraries
-│   ├── webContainerRuntime.ts  # WebContainer setup
+├── components/              # React components
+│   ├── ui/                  # Reusable UI components
+│   ├── CodeEditor.tsx       # Monaco editor wrapper
+│   ├── Terminal.tsx         # xterm.js terminal
+│   ├── Sidebar.tsx          # File explorer sidebar
+│   ├── IdeHeader.tsx        # IDE top navigation
+│   ├── IdeFooter.tsx        # IDE status bar
+│   ├── PreviewFrame.tsx     # Live preview iframe
+│   ├── HeroSection.tsx      # Landing hero section
+│   ├── FeaturesSection.tsx  # Landing features section
+│   └── FrameworkSection.tsx # Framework picker
+├── lib/                     # Core libraries
+│   ├── webContainerRuntime.ts  # WebContainer setup & commands
+│   ├── webContainerManager.ts  # WebContainer instance management
 │   ├── projectFiles.ts         # Framework templates
-│   └── ...
-├── pages/               # Page components
+│   ├── terminalSingleton.ts    # Terminal instance
+│   ├── atoms.ts                # Jotai state atoms
+│   ├── store.ts                # Global store
+│   ├── types.ts                # TypeScript types
+│   └── utils.ts                # Utility functions
+├── pages/                   # Page components
 │   ├── LandingPage.tsx
 │   └── IDEpage.tsx
-└── types.ts             # TypeScript types
+└── main.tsx                 # App entry point
 ```
 
 ## 🎨 Supported Frameworks
