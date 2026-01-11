@@ -1,8 +1,29 @@
-import { Code2, Play, Share2, Download, Upload } from "lucide-react";
+import { getWebContainer } from "@/libs/webContainerManager";
+import { Code2, Play, Share2, Download, Upload, Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import JSZip from "jszip";
+import { saveAs } from "file-saver";
 
 export const IdeHeader = () => {
   const navigate = useNavigate()
+  const [webContainer, setWebContainer] = useState<any>(null);
+  const [isDownloading, setIsDownloading] = useState(false);
+
+  useEffect(() => {
+    getWebContainer().then(setWebContainer);
+  }, []);
+
+  const handleDownload = async () => {
+    if (!webContainer || isDownloading) return;
+    setIsDownloading(true);
+    try {
+      await downloadProject(webContainer);
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
   return (
     <div className="h-12 border-b border-border bg-sidebar flex items-center justify-between px-4 shrink-0">
       <button onClick={() => navigate("/")} className="flex items-center gap-2 cursor-pointer">
@@ -15,9 +36,20 @@ export const IdeHeader = () => {
       </button>
 
       <div className="flex items-center gap-2">
-        <button className="flex items-center font-normal gap-1.5 px-3 py-1.5 hover:bg-blue-500/10 hover:text-blue-400 text-blue-500 text-xs rounded-md transition-colors border border-blue-500/20 cursor-pointer">
-          <Download className="w-3.5 h-3.5" />
-          <span>Download</span>
+        <button
+          onClick={handleDownload}
+          disabled={isDownloading}
+          className={`flex items-center font-normal gap-1.5 px-3 py-1.5 text-xs rounded-md transition-all border cursor-pointer ${isDownloading
+              ? "bg-blue-500/10 text-blue-400 border-blue-500/30"
+              : "hover:bg-blue-500/10 hover:text-blue-400 text-blue-500 border-blue-500/20"
+            }`}
+        >
+          {isDownloading ? (
+            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+          ) : (
+            <Download className="w-3.5 h-3.5" />
+          )}
+          <span>{isDownloading ? "Downloading..." : "Download"}</span>
         </button>
         <button className="flex items-center font-medium gap-1.5 px-3 py-1.5 hover:bg-violet-500/10 hover:text-violet-400 text-violet-500 text-xs rounded-md transition-colors border border-violet-500/20 cursor-pointer">
           <Upload className="w-3.5 h-3.5" />
@@ -38,3 +70,50 @@ export const IdeHeader = () => {
     </div>
   );
 };
+
+async function readAllFiles(
+  webContainer: any,
+  base = "/"
+): Promise<{ path: string; content: string }[]> {
+  const result: { path: string; content: string }[] = [];
+
+  async function walk(dir: string) {
+    const entries = await webContainer.fs.readdir(dir, {
+      withFileTypes: true,
+    });
+
+    for (const entry of entries) {
+      const fullPath = dir === "/" ? `/${entry.name}` : `${dir}/${entry.name}`;
+
+      if (entry.isFile()) {
+        const content = await webContainer.fs.readFile(fullPath, "utf-8");
+        result.push({
+          path: fullPath.replace(/^\//, ""), // remove leading slash for zip
+          content,
+        });
+      } else if (entry.isDirectory()) {
+        // optional: skip node_modules
+        if (entry.name === "node_modules") continue;
+
+        await walk(fullPath);
+      }
+    }
+  }
+
+  await walk(base);
+  return result;
+}
+
+async function downloadProject(webContainer: any) {
+  if (!webContainer) return;
+
+  const zip = new JSZip();
+  const files = await readAllFiles(webContainer);
+
+  for (const file of files) {
+    zip.file(file.path, file.content);
+  }
+
+  const blob = await zip.generateAsync({ type: "blob" });
+  saveAs(blob, "project.zip");
+}
