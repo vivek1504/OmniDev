@@ -88,7 +88,7 @@ export const IdeHeader = () => {
         <button className="p-2 hover:bg-secondary rounded-md transition-colors text-muted-foreground hover:text-foreground">
           <Share2 className="w-4 h-4" />
         </button>
-        <div className="text-xs text-muted-foreground px-2">v1.2.0</div>
+        <div className="text-xs text-muted-foreground px-2">v1.0.0</div>
       </div>
     </div>
   );
